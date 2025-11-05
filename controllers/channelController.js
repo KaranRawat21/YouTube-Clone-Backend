@@ -3,6 +3,8 @@ import Channel from "../schema/channelSchema.js";
 import { clientErorResponse, serverErrorResponse } from "../util/errorResponse.js";
 import User from "../schema/userSchema.js";
 import fs from "fs";
+import Video from "../schema/videoSchema.js";
+import { subscribe } from "diagnostics_channel";
 
 // ------------------------------CREATE CHANNEL--------------------------------
 export const createChannelController = async (req, res) => {
@@ -100,6 +102,45 @@ export const updateChannelController = async (req, res) => {
       channel: updatedChannel,
     })
 
+  } catch (err) {
+    return serverErrorResponse(err, res);
+  }
+};
+
+
+
+// ------------------------------FETCH CHANNEL VIDEOS--------------------------------
+export const fetchChannelDetailsController = async (req, res) => {
+  try {
+    const { channelId } = req.params;
+
+    //Validate channelId
+    if (!channelId) return clientErorResponse(res, 400, "Channel ID is required!");
+
+    //Check if the channel exists
+    const channel = await Channel.findById(channelId);
+    if (!channel) return clientErorResponse(res, 404, "Channel not found!");
+
+    //fetch videos
+    const videos = await Video.find({ channelId })
+      .populate("channelId", "channelName banner")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Fetched channel details!",
+      data: {
+        _id: channel._id,
+        channelName: channel.channelName,
+        baner: channel.banner,
+        description: channel.description,
+        subscribers: channel.subscribers,
+        videos: videos.length ? videos : [],
+      }
+    })
+
+
+    //Ensure user
   } catch (err) {
     return serverErrorResponse(err, res);
   }
