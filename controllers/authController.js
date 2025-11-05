@@ -4,6 +4,7 @@ import { clientErorResponse, serverErrorResponse } from "../util/errorResponse.j
 import bcrypt from "bcrypt";
 import fs from "fs";
 import { generateToken } from "../util/jwtToken.js";
+import { channel } from "diagnostics_channel";
 
 
 // -----------------------Registration Controller----------------------
@@ -89,6 +90,7 @@ export const loginController = async (req, res) => {
         username: user.username,
         email: user.email,
         avatar: user.avatar,
+        channel: user.channel
       }
     })
 

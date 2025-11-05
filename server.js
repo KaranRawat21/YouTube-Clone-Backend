@@ -2,7 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRouter.js"
+import authRoutes from "./routes/authRoutes.js";
+import channelRoutes from "./routes/channelRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +22,15 @@ app.get("/", (req, res) => {
 
 //authRoutes
 app.use("/api/auth", authRoutes);
+
+//channelRoutes
+app.use("/api", channelRoutes);
+
+//videoRoutes
+app.use("/api", videoRoutes);
+
+//commentRoutes
+app.use("/api", commentRoutes);
 
 // -------------Unknow Routes--------------
 app.use((req, res) => {
