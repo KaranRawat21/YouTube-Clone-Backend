@@ -51,7 +51,7 @@ export const addVideoController = async (req, res) => {
 export const fetchVideosController = async (req, res) => {
   try {
     const videos = await Video.find()
-      .populate("channelId", "channelName banner")
+      .populate("channelId", "channelName banner subscribers")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
@@ -64,6 +64,24 @@ export const fetchVideosController = async (req, res) => {
   }
 };
 
+
+// ------------------------------FETCH SINGLE VIDEO--------------------------------
+export const fetchSingleVideoController = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    if (!videoId.toString()) return clientErorResponse(res, 400, "Video ID is required!");
+    const video = await Video.findOne({ _id: videoId.toString() });
+    if (!video) return clientErorResponse(res, 404, "Requested video not found!");
+    return res.status(200).json({
+      success: true,
+      message: "Fetched video information successfully!",
+      video,
+    })
+
+  } catch (err) {
+    return serverErrorResponse(err, res);
+  }
+}
 
 
 // ------------------------------UPDATE VIDEO--------------------------------
