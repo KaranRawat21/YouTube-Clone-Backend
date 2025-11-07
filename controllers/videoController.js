@@ -77,7 +77,7 @@ export const fetchSingleVideoController = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Fetched video information successfully!",
-      video,
+      video: fullInfo,
     })
 
   } catch (err) {
