@@ -72,6 +72,8 @@ export const fetchSingleVideoController = async (req, res) => {
     if (!videoId.toString()) return clientErorResponse(res, 400, "Video ID is required!");
     const video = await Video.findOne({ _id: videoId.toString() });
     if (!video) return clientErorResponse(res, 404, "Requested video not found!");
+
+    const fullInfo = video.populate("channelId", "channelName banner")
     return res.status(200).json({
       success: true,
       message: "Fetched video information successfully!",
