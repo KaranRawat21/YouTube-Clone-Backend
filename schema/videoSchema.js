@@ -15,6 +15,10 @@ const VideoSchema = new mongoose.Schema({
     required: [true, "Thumbnail URL is required"],
     default: "https://www.elegantthemes.com/blog/wp-content/uploads/2019/04/change-wordpress-thumbnail-size-featured-image.jpg",
   },
+  videoUrl: {
+    type: String,
+    required: true,
+  },
   channelId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Channel",

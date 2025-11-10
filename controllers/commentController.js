@@ -22,15 +22,18 @@ export const addCommentController = async (req, res) => {
       text,
     });
 
+    const newComment = await comment.populate("userId", "username avatar");
+
     //adding comment id reference to video document
     video.comments.push(comment._id);
     await video.save();
+
 
     //response
     return res.status(201).json({
       success: true,
       message: "Comment added successfully!",
-      data: comment
+      data: newComment
     })
 
 
